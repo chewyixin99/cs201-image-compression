@@ -12,14 +12,14 @@ public class ImagetoPixelConverter {
             // Load the image from the specified file path
             File imageFile = new File(imagePath);
             this.image = ImageIO.read(imageFile);
-            
+
             // Get image width and height
             int width = image.getWidth();
             int height = image.getHeight();
-            
+
             // Initialize the pixelData array
             this.pixelData = new int[width][height][3];
-            
+
             // Convert the image into pixelData
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
@@ -48,6 +48,5 @@ public class ImagetoPixelConverter {
     public int getHeight() {
         return image.getHeight();
     }
-    
-}
 
+}

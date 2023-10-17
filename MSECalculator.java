@@ -12,8 +12,8 @@ public class MSECalculator {
             BufferedImage decompressedImage = ImageIO.read(new File("Decompressed/nasilemakdecompressedfrompng.jpg"));
 
             // Check if the images have the same dimensions
-            if (originalImage.getWidth() != decompressedImage.getWidth() || 
-                originalImage.getHeight() != decompressedImage.getHeight()) {
+            if (originalImage.getWidth() != decompressedImage.getWidth() ||
+                    originalImage.getHeight() != decompressedImage.getHeight()) {
                 System.err.println("Images have different dimensions.");
                 return;
             }

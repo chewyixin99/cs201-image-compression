@@ -24,8 +24,9 @@ public class PSNRCalculator {
     public static double calculatePSNR(BufferedImage originalImage, BufferedImage decompressedImage) {
         int width = originalImage.getWidth();
         int height = originalImage.getHeight();
-        
-        // Calculate the mean squared error (MSE) between original and decompressed images
+
+        // Calculate the mean squared error (MSE) between original and decompressed
+        // images
         double mse = 0.0;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -41,8 +42,8 @@ public class PSNRCalculator {
                 int bDecompressed = pixelDecompressed & 0xFF;
 
                 double squaredError = Math.pow(rOriginal - rDecompressed, 2) +
-                                      Math.pow(gOriginal - gDecompressed, 2) +
-                                      Math.pow(bOriginal - bDecompressed, 2);
+                        Math.pow(gOriginal - gDecompressed, 2) +
+                        Math.pow(bOriginal - bDecompressed, 2);
                 mse += squaredError;
             }
         }
@@ -53,7 +54,7 @@ public class PSNRCalculator {
 
         // Calculate PSNR
         double psnr = 20 * Math.log10(maxPixelValue / Math.sqrt(mse));
-        
+
         return psnr;
     }
 }
