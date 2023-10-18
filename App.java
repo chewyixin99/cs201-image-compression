@@ -99,17 +99,18 @@ public class App {
 
                     // calculate MAE
                     double MAE = MAECalculator.calculateMAE(originalimage, decompressedimage);
-                    System.out.println("Mean Absolute Error of :" + imageName + " is " + MAE);
+                    System.out.println("Mean Absolute Error of :" + imageName + " is " + MAE + " (lower is better)");
 
                     // calculate MSE
                     double MSE = MSECalculator.calculateMSE(originalimage, decompressedimage);
-                    System.out.println("Mean Squared Error of :" + imageName + " is " + MSE);
+                    System.out.println("Mean Squared Error of :" + imageName + " is " + MSE + " (lower is better)");
 
                     // calculate PSNR
                     double PSNR = PSNRCalculator.calculatePSNR(originalimage, decompressedimage);
-                    System.out.println("PSNR of :" + imageName + " is " + PSNR);
+                    System.out.println("PSNR of :" + imageName + " is " + PSNR + " (higher is better)");
 
                 }
+                System.out.println();
             }
         }
 
