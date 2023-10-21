@@ -4,12 +4,12 @@ import java.util.*;
 public class Utility {
 
     ContextData contextData;
+    int haarWaveletTransformLevels = 1;
 
     public void Compress(int[][][] pixels, String outputFileName) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) {
 
             // wavelet transform step
-            int haarWaveletTransformLevels = 3;
             int[][][] transformedPixels = haarWaveletTransform3D(pixels,
                     haarWaveletTransformLevels);
 
@@ -24,6 +24,8 @@ public class Utility {
             // encoding step
             String encodedString = tree.encodeQuantizedRGBToString(quantizedRGB);
             byte[] binary = tree.binaryStringToBinary(encodedString);
+            // String encodedStringWithoutQuantizer = tree.encodeQuantizedRGBToString(transformedPixels);
+            // System.out.println("Old: " + encodedStringWithoutQuantizer.length() + ", New: " + encodedString.length());
 
             // final step, package necessary data to decode
             int numRows = quantizedRGB.length;
@@ -50,13 +52,6 @@ public class Utility {
                                 .getNumChannels());
 
                 // inverse transform step
-                int haarWaveletTransformLevels = 3;
-
-                // int[][][] test = inverseHaarWaveletTransform3D(decodedQuantizedRGB,
-                // haarWaveletTransformLevels);
-                // System.out.println(test.length + " " + test[0].length + " " +
-                // test[0][0].length);
-
                 return inverseHaarWaveletTransform3D(decodedQuantizedRGB,
                         haarWaveletTransformLevels);
             } else {
@@ -94,7 +89,6 @@ public class Utility {
             }
             // Update dimensions for the next level
             numRows /= 2;
-            numCols /= 2;
         }
 
         return outputImage;
@@ -142,7 +136,6 @@ public class Utility {
             }
             // Update dimensions for the next level
             numRows /= 2;
-            numCols /= 2;
         }
 
         return outputImage;
@@ -208,7 +201,6 @@ public class Utility {
 
         return rgbFrequencies;
     }
-
 }
 
 class HuffmanNode implements Comparable<HuffmanNode>, Serializable {
