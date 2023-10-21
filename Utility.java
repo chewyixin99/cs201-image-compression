@@ -9,7 +9,7 @@ public class Utility {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFileName))) {
 
             // wavelet transform step
-            int haarWaveletTransformLevels = 1;
+            int haarWaveletTransformLevels = 3;
             int[][][] transformedPixels = haarWaveletTransform3D(pixels,
                     haarWaveletTransformLevels);
 
@@ -50,7 +50,7 @@ public class Utility {
                                 .getNumChannels());
 
                 // inverse transform step
-                int haarWaveletTransformLevels = 1;
+                int haarWaveletTransformLevels = 3;
 
                 // int[][][] test = inverseHaarWaveletTransform3D(decodedQuantizedRGB,
                 // haarWaveletTransformLevels);
@@ -73,7 +73,7 @@ public class Utility {
         int numCols = image[0].length;
         int depth = image[0][0].length; // Number of color channels (e.g., R, G, B)
 
-        int[][][] outputImage = new int[numRows][numCols][depth];
+        int[][][] outputImage = image;
 
         for (int level = 0; level < levels; level++) {
             // Apply Haar wavelet transform to each color channel
@@ -82,7 +82,7 @@ public class Utility {
                     // create a new row to contain all of 1 color channel
                     int[] row = new int[numCols];
                     for (int j = 0; j < numCols; j++) {
-                        row[j] = image[i][j][d];
+                        row[j] = outputImage[i][j][d];
                     }
                     // apply wavelet transform
                     int[] transformedRow = haarWaveletTransform1D(row);
@@ -121,16 +121,16 @@ public class Utility {
         int numCols = image[0].length;
         int depth = image[0][0].length; // Number of color channels (e.g., R, G, B)
 
-        int[][][] outputImage = new int[numRows][numCols][depth];
+        int[][][] outputImage = image;
 
-        for (int level = 0; level < levels; level++) {
+        for (int level = levels - 1; level >= 0; level--) {
             // Apply Haar wavelet transform to each color channel
             for (int d = 0; d < depth; d++) {
                 for (int i = 0; i < numRows; i++) {
                     // create a new row to contain all of 1 color channel
                     int[] row = new int[numCols];
                     for (int j = 0; j < numCols; j++) {
-                        row[j] = image[i][j][d];
+                        row[j] = outputImage[i][j][d];
                     }
                     // apply wavelet transform
                     int[] transformedRow = inverseHaarWaveletTransform1D(row);
