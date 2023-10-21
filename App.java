@@ -57,7 +57,7 @@ public class App {
                     // end timer for compress and record the total time passed
                     long compressEndTime = System.currentTimeMillis();
                     long compressExecutionTime = compressEndTime - compressStartTime;
-                    System.out.println("Compress Execution Time for " + imageName + " : " + compressExecutionTime
+                    System.out.println("Compress Execution Time for " + imageName + ": " + compressExecutionTime
                             + " milliseconds");
 
                     // Check the original file size
@@ -86,7 +86,7 @@ public class App {
                     // end timer for decompress and record the total time passed
                     long decompressEndTime = System.currentTimeMillis();
                     long decompressExecutionTime = decompressEndTime - decompressStartTime;
-                    System.out.println("Decompress Execution Time for " + imageName + " : " + decompressExecutionTime
+                    System.out.println("Decompress Execution Time for " + imageName + ": " + decompressExecutionTime
                             + " milliseconds");
 
                     // convert back to image for visualisation
@@ -99,18 +99,18 @@ public class App {
 
                     // calculate MAE
                     double MAE = MAECalculator.calculateMAE(originalimage, decompressedimage);
-                    System.out.println("Mean Absolute Error of :" + imageName + " is " + MAE + " (lower is better)");
+                    System.out.println("Mean Absolute Error of: " + imageName + " is " + MAE + " (lower is better)");
 
                     // calculate MSE
                     double MSE = MSECalculator.calculateMSE(originalimage, decompressedimage);
-                    System.out.println("Mean Squared Error of :" + imageName + " is " + MSE + " (lower is better)");
+                    System.out.println("Mean Squared Error of: " + imageName + " is " + MSE + " (lower is better)");
 
                     // calculate PSNR
                     double PSNR = PSNRCalculator.calculatePSNR(originalimage, decompressedimage);
-                    System.out.println("PSNR of :" + imageName + " is " + PSNR + " (higher is better)");
+                    System.out.println("PSNR of: " + imageName + " is " + PSNR + " (higher is better)");
+                    System.out.println();
 
                 }
-                System.out.println();
             }
         }
 
