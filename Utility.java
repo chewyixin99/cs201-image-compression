@@ -23,26 +23,27 @@ public class Utility {
 
             // encoding step
             String encodedString = tree.encodeQuantizedRGBToString(quantizedRGB);
+            byte[] binary = tree.binaryStringToBinary(encodedString);
 
             // final step, package necessary data to decode
             int numRows = quantizedRGB.length;
             int numCols = quantizedRGB[0].length;
             int numChannels = quantizedRGB[0][0].length;
-            ContextData data = new ContextData(tree, encodedString, numRows, numCols, numChannels);
+            ContextData data = new ContextData(tree, encodedString, binary, numRows, numCols, numChannels);
             this.contextData = data;
 
             // write to outputstream and save the file
-            oos.writeObject(encodedString);
+            oos.writeObject(binary);
         }
     }
 
     public int[][][] Decompress(String inputFileName) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(inputFileName))) {
             Object object = ois.readObject();
-            if (object instanceof String) {
+            if (object instanceof byte[]) {
                 // retrieve huffman tree
                 HuffmanTree tree = contextData.getHuffmanTree();
-                String encodedString = (String) object;
+                String encodedString = tree.binaryToBinaryString((byte[]) object);
                 // decoding step
                 int[][][] decodedQuantizedRGB = tree.decodeStringToQuantizedRGB(encodedString,
                         contextData.getNumRows(), contextData.getNumCols(), contextData
@@ -310,7 +311,27 @@ class HuffmanTree implements Serializable {
                 encodedString.append(code);
             }
         }
+
         return encodedString.toString();
+    }
+
+    public byte[] binaryStringToBinary(String binaryString) {
+        // init bitset and set bits based on string
+        BitSet bitSet = new BitSet(binaryString.length());
+        for (int i = 0; i < binaryString.length(); i++) {
+            if (binaryString.charAt(i) == '1') {
+                bitSet.set(i);
+            }
+        }
+        // convert bitset to byte array
+        byte[] byteArray = bitSet.toByteArray();
+
+        // if last byte is not used, remove it
+        if (byteArray.length * 8 > binaryString.length()) {
+            byteArray = Arrays.copyOf(byteArray, byteArray.length - 1);
+        }
+
+        return byteArray;
     }
 
     public int[][][] decodeStringToQuantizedRGB(String encodedString, int numRows, int numCols, int numChannels) {
@@ -341,6 +362,21 @@ class HuffmanTree implements Serializable {
         return decodedArr;
     }
 
+    public String binaryToBinaryString(byte[] binary) {
+        BitSet bitSet = BitSet.valueOf(binary);
+        StringBuilder binaryString = new StringBuilder(bitSet.length());
+
+        for (int i = 0; i < bitSet.length(); i++) {
+            if (bitSet.get(i)) {
+                binaryString.append("1");
+            } else {
+                binaryString.append("0");
+            }
+        }
+
+        return binaryString.toString();
+    }
+
     public static Map<List<Integer>, Integer> calculateRGBFrequencies(int[][][] quantizedRGB) {
         HashMap<List<Integer>, Integer> rgbFrequencies = new HashMap<>();
 
@@ -366,14 +402,16 @@ class HuffmanTree implements Serializable {
 class ContextData implements Serializable {
     private HuffmanTree huffmanTree;
     private String encodedString;
+    private byte[] binary;
     private int numRows;
     private int numCols;
     private int numChannels;
 
-    public ContextData(HuffmanTree huffmanTree, String encodedString, int numRows, int numCols,
+    public ContextData(HuffmanTree huffmanTree, String encodedString, byte[] binary, int numRows, int numCols,
             int numChannels) {
         this.huffmanTree = huffmanTree;
         this.encodedString = encodedString;
+        this.binary = binary;
         this.numRows = numRows;
         this.numCols = numCols;
         this.numChannels = numChannels;
@@ -385,6 +423,10 @@ class ContextData implements Serializable {
 
     public String getEncodedString() {
         return this.encodedString;
+    }
+
+    public byte[] getBinary() {
+        return this.binary;
     }
 
     public int getNumRows() {
